@@ -9,15 +9,10 @@ public class MainManager: MonoBehaviour
 {
     public static MainManager instance;
     public string playerName;
-    public string bestScorePlayerName;
-    public int bestScore;
-    public float ballMaxSpeed;
 
-    private Score bestLastScore;
-    public BestScores bestScores;
-    public Settings gameSettings;
+    public GameData gameData;
 
-    private string _savingPath;
+    public static string dataFile;
 
     private void Awake()
     {
@@ -34,49 +29,42 @@ public class MainManager: MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _savingPath = Application.persistentDataPath + "/";
-        print($"Directorio de guardado: {_savingPath}");
-        bestLastScore = LoadData("scores.json");
-
-        // Game Settings
-        gameSettings = new Settings();
-        gameSettings.ballMaxSpeed = 3f;
-        MainManager.instance.ballMaxSpeed = gameSettings.ballMaxSpeed;
+        dataFile = Application.persistentDataPath + "/data.json";
 
         // Best scores
-        bestScores = new BestScores();
-        bestScores.bestScores.Add(new Score("Miguel", 15));
-        bestScores.bestScores.Add(new Score("Ana", 12));
-        bestScores.bestScores.Add(new Score("Emma", 9));
-        bestScorePlayerName = bestLastScore.playerName;
-        bestScore = bestLastScore.score;
+        gameData = LoadData(dataFile);
     }
 
-    public void SaveData(string filename)
+    /// <summary>
+    /// Guarda los datos del juego en el archivo indicado
+    /// </summary>
+    /// <param name="file">Ruta completa del archivo de guardado</param>
+    public void SaveData(string file)
     {
-        bestLastScore.score = bestScore;
-        bestLastScore.playerName = bestScorePlayerName;
-        string json = JsonUtility.ToJson(bestLastScore);
-        File.WriteAllText(_savingPath + filename, json);
-
-        // TODO: Guardar la lista de mejores puntuaciones
+        string json = JsonUtility.ToJson(gameData);
+        File.WriteAllText(file, json);
     }
 
-    private Score LoadData(string filename)
+    /// <summary>
+    /// Carga los datos del juego del archivo especificado
+    /// </summary>
+    /// <param name="file">Ruta completa del archivo con los datos del juego</param>
+    /// <returns>Objeto GameData con los datos de las mejores puntuaciones.</returns>
+    private GameData LoadData(string file)
     {
-        Score score = new Score();
+        GameData data;
 
-        if(File.Exists(_savingPath + filename))
+        if(File.Exists(file))
         {
-            string json = File.ReadAllText(_savingPath + filename);
-            score = JsonUtility.FromJson<Score>(json);
+            string json = File.ReadAllText(file);
+            data = JsonUtility.FromJson<GameData>(json);
             print("Datos cargados");
-            return score;
         } else
         {
-            score = new Score();
-            return score;
+            data = new GameData();
         }
+
+        return data;
     }
 
     [Serializable]
@@ -102,21 +90,17 @@ public class MainManager: MonoBehaviour
     }
 
     [Serializable]
-    public class BestScores
+    public class GameData
     {
         public List<Score> bestScores;
+        public float ballMaxSpeed;
 
-        public BestScores()
+        public GameData()
         {
             bestScores = new List<Score>();
+            ballMaxSpeed = 3f;
         }
 
-    }
-
-    [Serializable]
-    public class Settings
-    {
-        public float ballMaxSpeed;
     }
 
 }

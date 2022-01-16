@@ -12,7 +12,7 @@ public class Ball : MonoBehaviour
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
-        maxVelocity = MainManager.instance.ballMaxSpeed;
+        maxVelocity = MainManager.instance.gameData.ballMaxSpeed;
     }
     
     private void OnCollisionExit(Collision other)

@@ -17,7 +17,7 @@ public class SettingsMenuHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _ballSpeed = MainManager.instance.ballMaxSpeed;
+        _ballSpeed = MainManager.instance.gameData.ballMaxSpeed;
         scrollBar.value = (_ballSpeed - _baseSpeed)/7;
     }
 
@@ -32,7 +32,8 @@ public class SettingsMenuHandler : MonoBehaviour
     {
         _ballSpeed = Mathf.Round(_ballSpeed);
         Debug.Log("Ball speed: " + _ballSpeed);
-        MainManager.instance.ballMaxSpeed = _ballSpeed;
+        MainManager.instance.gameData.ballMaxSpeed = _ballSpeed;
+        MainManager.instance.SaveData(MainManager.dataFile);
         SceneManager.LoadScene("menu", LoadSceneMode.Single);
     }
 }

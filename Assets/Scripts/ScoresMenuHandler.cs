@@ -12,10 +12,10 @@ public class ScoresMenuHandler : MonoBehaviour
     void Start()
     {
         scoresText.text = "";
-        for(int i=0; i<3; i++)
+        for(int i=0; i<MainManager.instance.gameData.bestScores.Count; i++)
         {
-            string playerName = MainManager.instance.bestScores.bestScores[i].playerName;
-            int score = MainManager.instance.bestScores.bestScores[i].score;
+            string playerName = MainManager.instance.gameData.bestScores[i].playerName;
+            int score = MainManager.instance.gameData.bestScores[i].score;
 
             scoresText.text += $"{playerName}: {score}\n";
         }

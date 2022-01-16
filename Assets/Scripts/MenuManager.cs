@@ -11,6 +11,12 @@ public class MenuManager : MonoBehaviour
 {
     [SerializeField] string userName;
     public TextMeshProUGUI playerName;
+    public TextMeshProUGUI ballSpeedInfo;
+
+    private void Start()
+    {
+        ballSpeedInfo.text = $"Max Ball Speed: {MainManager.instance.gameData.ballMaxSpeed}";
+    }
 
     public void StartGame()
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager: MonoBehaviour
 {
     public Brick BrickPrefab;
     public int LineCount = 6;
@@ -84,19 +84,16 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        if(m_Points > _lastBestScore)
+        print($"m_Points: {m_Points}, _lastBestScore: {_lastBestScore}");
+
+        MainManager.instance.gameData.bestScores.Add(new MainManager.Score(_playerName, m_Points));
+        MainManager.instance.gameData.bestScores.Sort(new ScoreComparer());
+        if(MainManager.instance.gameData.bestScores.Count > 3)
         {
-            print($"m_Points: {m_Points}, _lastBestScore: {_lastBestScore}");
-            MainManager.instance.bestScore = m_Points;
-            MainManager.instance.bestScorePlayerName = _playerName;
-            SetLastBestScore();
-            print($"Mejor puntuación para guardar: " + MainManager.instance.bestScore);
-            print($"Mejor jugador para guardar: " + MainManager.instance.bestScorePlayerName);
-            MainManager.instance.SaveData("scores.json");
+            MainManager.instance.gameData.bestScores.RemoveRange(3, MainManager.instance.gameData.bestScores.Count-3);
         }
 
-        // TODO: implementar que se guarde la puntuación y se ordene la lista de
-        // mejores puntuaciones
+        MainManager.instance.SaveData(MainManager.dataFile);
 
         m_GameOver = true;
         GameOverText.SetActive(true);
@@ -110,9 +107,29 @@ public class GameManager : MonoBehaviour
 
     public void SetLastBestScore()
     {
-        _lastBestScore = MainManager.instance.bestScore;
-        _lastBestPlayerName = MainManager.instance.bestScorePlayerName;
+        if(MainManager.instance.gameData.bestScores.Count != 0)
+        {
+            _lastBestScore = MainManager.instance.gameData.bestScores[0].score;
+            _lastBestPlayerName = MainManager.instance.gameData.bestScores[0].playerName;
+        }
+        else
+        {
+            _lastBestPlayerName = "No player";
+            _lastBestScore = 0;
+        }
+        
 
         BestScore.text = $"Best Score: {_lastBestPlayerName}: {_lastBestScore}";
+    }
+
+    class ScoreComparer : IComparer<MainManager.Score>
+    {
+        int IComparer<MainManager.Score>.Compare(MainManager.Score x, MainManager.Score y)
+        {
+            if(x.score < y.score) return 1;
+            if(x.score == y.score) return 0;
+            if(x.score > y.score) return -1;
+            return 0;
+        }
     }
 }
