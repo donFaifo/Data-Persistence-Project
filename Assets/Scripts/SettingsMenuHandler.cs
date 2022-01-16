@@ -12,7 +12,7 @@ public class SettingsMenuHandler : MonoBehaviour
     public Scrollbar scrollBar;
 
     [SerializeField] private float _ballSpeed;
-    private float _baseSpeed = 3f;
+    private float _baseSpeed = 3f;  // Minimum speed will be 3, maximum speed will be 10
 
     // Start is called before the first frame update
     void Start()
@@ -21,13 +21,18 @@ public class SettingsMenuHandler : MonoBehaviour
         scrollBar.value = (_ballSpeed - _baseSpeed)/7;
     }
 
-
+    /// <summary>
+    /// Set the text of the label next to the scrollbar
+    /// </summary>
     public void SetSpeedText()
     {
-        _ballSpeed = _baseSpeed + scrollBar.value * 7f;
+        _ballSpeed = _baseSpeed + scrollBar.value * 7f;  // This sets 7 steps in the scroll bar so the maximum speed will be limited to 10 (3 + 7)
         speedText.text = Mathf.Round(_ballSpeed).ToString();
     }
 
+    /// <summary>
+    /// Save the settings to be persistent through the game and sessions
+    /// </summary>
     public void SaveSettings()
     {
         _ballSpeed = Mathf.Round(_ballSpeed);

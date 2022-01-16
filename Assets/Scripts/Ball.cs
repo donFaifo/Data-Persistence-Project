@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    public float maxVelocity = 3f;
+    public float maxVelocity = 3f; // Added public variable to use a game setting
 
     private Rigidbody m_Rigidbody;
 

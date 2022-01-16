@@ -18,12 +18,18 @@ public class MenuManager : MonoBehaviour
         ballSpeedInfo.text = $"Max Ball Speed: {MainManager.instance.gameData.ballMaxSpeed}";
     }
 
+    /// <summary>
+    /// Starts the game launching main scene
+    /// </summary>
     public void StartGame()
     {
         MainManager.instance.playerName = playerName.text;
         SceneManager.LoadScene("main", LoadSceneMode.Single);
     }
 
+    /// <summary>
+    /// Quit the game or exits from play mode
+    /// </summary>
     public void QuitGame()
     {
 #if UNITY_EDITOR
@@ -33,6 +39,9 @@ public class MenuManager : MonoBehaviour
 #endif
     }
 
+    /// <summary>
+    /// Loads settings scene
+    /// </summary>
     public void OpenSettings()
     {
         SceneManager.LoadScene("settings", LoadSceneMode.Single);

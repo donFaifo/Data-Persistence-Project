@@ -89,6 +89,9 @@ public class MainManager: MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Stores all the game data to be saved.
+    /// </summary>
     [Serializable]
     public class GameData
     {

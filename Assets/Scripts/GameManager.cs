@@ -82,10 +82,15 @@ public class GameManager: MonoBehaviour
         ScoreText.text = $"{_playerName} score : {m_Points}";
     }
 
+    /// <summary>
+    /// Ends the game and sets boolean m_GameOver true
+    /// </summary>
     public void GameOver()
     {
         print($"m_Points: {m_Points}, _lastBestScore: {_lastBestScore}");
 
+        // To maintain the bests three scores, a new Socore is added to the list, then
+        // sorted using a comparer interface to finally trim the list to the three firsts scores
         MainManager.instance.gameData.bestScores.Add(new MainManager.Score(_playerName, m_Points));
         MainManager.instance.gameData.bestScores.Sort(new ScoreComparer());
         if(MainManager.instance.gameData.bestScores.Count > 3)
@@ -99,12 +104,18 @@ public class GameManager: MonoBehaviour
         GameOverText.SetActive(true);
     }
 
+    /// <summary>
+    /// Sets the player's info on the screen
+    /// </summary>
     public void SetPlayerName()
     {
         _playerName = MainManager.instance.playerName;
         ScoreText.text = $"{_playerName} score: 0";
     }
 
+    /// <summary>
+    /// Sets the last best score taken from the last three bests scores
+    /// </summary>
     public void SetLastBestScore()
     {
         if(MainManager.instance.gameData.bestScores.Count != 0)
@@ -121,6 +132,7 @@ public class GameManager: MonoBehaviour
 
         BestScore.text = $"Best Score: {_lastBestPlayerName}: {_lastBestScore}";
     }
+
 
     class ScoreComparer : IComparer<MainManager.Score>
     {
