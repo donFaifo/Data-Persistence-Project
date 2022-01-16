@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public Brick BrickPrefab;
     public int LineCount = 6;
-    public Rigidbody Ball;
+    public GameObject Ball;
 
     public Text ScoreText;
     public Text BestScore;
@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     private string _playerName;
     private int _lastBestScore;
     private string _lastBestPlayerName;
+    private Rigidbody _ballRb;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
         SetLastBestScore();
         SetPlayerName();
         BuildBrickWall();
+        _ballRb = Ball.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -44,14 +46,14 @@ public class GameManager : MonoBehaviour
                 forceDir.Normalize();
 
                 Ball.transform.SetParent(null);
-                Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
+                _ballRb.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
             }
         }
         else if(m_GameOver)
         {
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene("best scores");
             }
         }
     }
@@ -92,6 +94,10 @@ public class GameManager : MonoBehaviour
             print($"Mejor jugador para guardar: " + MainManager.instance.bestScorePlayerName);
             MainManager.instance.SaveData("scores.json");
         }
+
+        // TODO: implementar que se guarde la puntuación y se ordene la lista de
+        // mejores puntuaciones
+
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
